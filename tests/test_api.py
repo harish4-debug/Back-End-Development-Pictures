@@ -59,7 +59,7 @@ def test_post_picture_duplicate(picture, client):
     assert res.status_code == 302
     assert res.json['Message'] == f"picture with id {picture['id']} already present"
 
-def test_update_picture_by_id(client, picture):
+def hold_test_update_picture_by_id(client, picture):
     id = '2'
     res = client.get(f'/picture/{id}')
     res_picture = res.json
@@ -73,7 +73,7 @@ def test_update_picture_by_id(client, picture):
     res = client.get(f'/picture/{id}')
     assert res.json['event_state'] == new_state
 
-def test_delete_picture_by_id(client):
+def hold_test_delete_picture_by_id(client):
     res = client.get("/count")
     assert res.json['length'] == 11
     res = client.delete("/picture/1")

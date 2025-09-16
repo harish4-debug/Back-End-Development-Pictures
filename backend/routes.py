@@ -20,7 +20,6 @@ def health():
 # COUNT THE NUMBER OF PICTURES
 ######################################################################
 
-
 @app.route("/count")
 def count():
     """return length of data"""
@@ -35,7 +34,10 @@ def count():
 ######################################################################
 @app.route("/picture", methods=["GET"])
 def get_pictures():
-    pass
+    try:
+        return jsonify(data), 200
+    except NameError:
+        return {"message": "Data not found"}, 404
 
 ######################################################################
 # GET A PICTURE
@@ -44,7 +46,10 @@ def get_pictures():
 
 @app.route("/picture/<int:id>", methods=["GET"])
 def get_picture_by_id(id):
-    pass
+    for picture in data:
+        if picture["id"] == id:
+            return picture
+    return {"message": "Picture not found"}, 404
 
 
 ######################################################################
@@ -52,7 +57,20 @@ def get_picture_by_id(id):
 ######################################################################
 @app.route("/picture", methods=["POST"])
 def create_picture():
-    pass
+    try:
+        new_picture = request.json
+        if not new_picture:
+            return {"message": "Invalid input, no data provided"}, 400
+
+        old_picture = get_picture_by_id(new_picture['id'])
+        #if old_picture:
+        #    return jsonify({"message":"picture with id {new_picture['id']} already present"}), 302
+
+        #data[len(data)] = new_picture
+        return jsonify(data), 200
+    except Exception as e:
+        return {"message" : jsonify(e)}, 500
+
 
 ######################################################################
 # UPDATE A PICTURE
