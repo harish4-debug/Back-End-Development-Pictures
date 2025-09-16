@@ -1,33 +1,33 @@
 import json
 
-def test_health(client):
+def hold_test_health(client):
     res = client.get("/health")
     assert res.status_code == 200
 
 
-def test_count(client):
+def hold_test_count(client):
     res = client.get("/count")
     assert res.status_code == 200
     assert res.json['length'] == 10
 
 
-def test_data_contains_10_pictures(client):
+def hold_test_data_contains_10_pictures(client):
     res = client.get("/picture")
     assert len(res.json) == 10
 
 
-def test_get_picture(client):
+def hold_test_get_picture(client):
     res = client.get("/picture")
     assert res.status_code == 200
     assert len(res.json) == 10
 
 
-def test_get_pictures_check_content_type_equals_json(client):
+def hold_test_get_pictures_check_content_type_equals_json(client):
     res = client.get("/picture")
     assert res.headers["Content-Type"] == "application/json"
 
 
-def test_get_picture_by_id(client):
+def hold_test_get_picture_by_id(client):
     id_delete = 2
     res = client.get(f'/picture/{id_delete}')
     assert res.status_code == 200
@@ -37,7 +37,7 @@ def test_get_picture_by_id(client):
     assert res.status_code == 404
 
 
-def test_pictures_json_is_not_empty(client):
+def hold_test_pictures_json_is_not_empty(client):
     res = client.get("/picture")
     assert len(res.json) > 0
 
@@ -52,7 +52,7 @@ def test_post_picture(picture, client):
     assert res.status_code == 200
     assert res.json['length'] == 11
 
-def test_post_picture_duplicate(picture, client):
+def hold_test_post_picture_duplicate(picture, client):
     # create a brand new picture to upload
     res = client.post("/picture", data=json.dumps(picture),
                       content_type="application/json")

@@ -58,18 +58,29 @@ def get_picture_by_id(id):
 @app.route("/picture", methods=["POST"])
 def create_picture():
     try:
-        new_picture = request.json
+        new_picture = request.get_json()
         if not new_picture:
             return {"message": "Invalid input, no data provided"}, 400
 
-        old_picture = get_picture_by_id(new_picture['id'])
-        #if old_picture:
-        #    return jsonify({"message":"picture with id {new_picture['id']} already present"}), 302
+        id = new_picture['id']
+        old_picture = None
+        for picture in data:
+            if picture["id"] == id:
+                old_picture = picture
 
-        #data[len(data)] = new_picture
-        return jsonify(data), 200
+        if not old_picture:
+            # picture does not exit.
+            data[len(data)-1] = new_picture
+            return jsonify(data), 201
+        else:
+            return jsonify({"message":f"picture with id {new_picture['id']} already present"}), 302
+
     except Exception as e:
-        return {"message" : jsonify(e)}, 500
+        return jsonify({
+            "error": "Internal Server Error",
+            "message": "An unexpected error occurred",
+            "details": str(e)
+        }), 500
 
 
 ######################################################################
