@@ -1,33 +1,33 @@
 import json
 
-def hold_test_health(client):
+def test_health(client):
     res = client.get("/health")
     assert res.status_code == 200
 
 
-def hold_test_count(client):
+def test_count(client):
     res = client.get("/count")
     assert res.status_code == 200
     assert res.json['length'] == 10
 
 
-def hold_test_data_contains_10_pictures(client):
+def test_data_contains_10_pictures(client):
     res = client.get("/picture")
     assert len(res.json) == 10
 
 
-def hold_test_get_picture(client):
+def test_get_picture(client):
     res = client.get("/picture")
     assert res.status_code == 200
     assert len(res.json) == 10
 
 
-def hold_test_get_pictures_check_content_type_equals_json(client):
+def test_get_pictures_check_content_type_equals_json(client):
     res = client.get("/picture")
     assert res.headers["Content-Type"] == "application/json"
 
 
-def hold_test_get_picture_by_id(client):
+def test_get_picture_by_id(client):
     id_delete = 2
     res = client.get(f'/picture/{id_delete}')
     assert res.status_code == 200
@@ -37,7 +37,7 @@ def hold_test_get_picture_by_id(client):
     assert res.status_code == 404
 
 
-def hold_test_pictures_json_is_not_empty(client):
+def test_pictures_json_is_not_empty(client):
     res = client.get("/picture")
     assert len(res.json) > 0
 
@@ -52,14 +52,14 @@ def test_post_picture(picture, client):
     assert res.status_code == 200
     assert res.json['length'] == 11
 
-def hold_test_post_picture_duplicate(picture, client):
+def test_post_picture_duplicate(picture, client):
     # create a brand new picture to upload
     res = client.post("/picture", data=json.dumps(picture),
                       content_type="application/json")
     assert res.status_code == 302
     assert res.json['Message'] == f"picture with id {picture['id']} already present"
 
-def hold_test_update_picture_by_id(client, picture):
+def test_update_picture_by_id(client, picture):
     id = '2'
     res = client.get(f'/picture/{id}')
     res_picture = res.json
@@ -73,7 +73,7 @@ def hold_test_update_picture_by_id(client, picture):
     res = client.get(f'/picture/{id}')
     assert res.json['event_state'] == new_state
 
-def hold_test_delete_picture_by_id(client):
+def test_delete_picture_by_id(client):
     res = client.get("/count")
     assert res.json['length'] == 11
     res = client.delete("/picture/1")
